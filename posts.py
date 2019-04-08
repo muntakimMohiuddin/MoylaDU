@@ -1,10 +1,11 @@
 from firebase import firebase
 firebase=firebase.FirebaseApplication('https://fir-basic-9a5d7.firebaseio.com/')
+from munch import munchify
+from copy import deepcopy
 class Posts:
     def __init__(self,postId,post_object):
         self.id=postId
         self.authorId=post_object['authorId']
-        self.authorName=firebase.get('profiles/'+self.authorId,None)['username']
         self.commentsCount=post_object['commentsCount']
         self.createdDate=post_object['createdDate']
         self.createdDateText=post_object['createdDateText']
@@ -18,3 +19,8 @@ class Posts:
 
     def __str__(self):
         return str(self.__dict__)
+
+    def getShowable(self):
+        temp=deepcopy(self.__dict__)
+        temp['authorName']=firebase.get('users/'+self.authorId,None)['username']
+        return munchify(temp)
