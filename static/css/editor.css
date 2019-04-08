@@ -1,0 +1,16 @@
+.udebug {
+    width: 100%;
+
+}
+
+.container{
+    display: flex;
+    padding-bottom: 0%;
+
+}
+.fixed{
+    width: 500px;
+}
+.flex-item{
+    flex-grow: 1;
+}

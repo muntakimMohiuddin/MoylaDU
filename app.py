@@ -32,14 +32,6 @@ ckeditor = CKEditor(app)
 app.secret_key = "super secret key"
 sess = Session()
 
-
-
-
-
-
-
-
-
 @app.route('/')
 def index():
     postlist = []
@@ -86,16 +78,6 @@ def profile(id):
 #
 
 
-#
-# @app.route('/issue/<id>')
-# def userIssues(id):
-#     from profile import profileIssueCall
-#     user,issue_array= profileIssueCall(id)
-#     return render_template('user_issues.html',user=user,issue_array=issue_array)
-#
-#
-# #   ASIF AHMED*******************************
-# # ***************************************************************************
 
 @app.route('/user/<userName>',methods=['GET', 'POST'])
 def userProfile(userName):
