@@ -11,13 +11,11 @@ from flask import redirect, url_for, session, Session
 from flask_ckeditor import CKEditor, CKEditorField
 from flask_codemirror import CodeMirror
 from flask_codemirror.fields import CodeMirrorField
-from flask_pymongo import PyMongo
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
 from wtforms import Form, IntegerField, StringField, PasswordField, validators
 from wtforms.fields import SubmitField, TextAreaField
 from wtforms.fields.html5 import EmailField
-from flask_pymongo import PyMongo
 
 
 class IssueForm(FlaskForm):
