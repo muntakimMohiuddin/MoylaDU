@@ -156,7 +156,7 @@
         }
         function like(element){
             var firebase= new Firebase(likeUtil);
-             firebase.get("posts/"+element.name)
+             firebase.get("post-comments/"+element.name)
         }
         function likeUtil(data) {
             alert(JSON.stringify(data));
