@@ -1,0 +1,14 @@
+
+.container {
+    display: flex;
+    padding-bottom: 2%;
+
+}
+
+.fixed {
+    width: 500px;
+}
+
+.flex-item {
+    flex-grow: 1;
+}

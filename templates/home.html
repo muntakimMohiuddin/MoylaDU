@@ -131,20 +131,20 @@
     </div>
 
     <script type="text/javascript">
-
+         postId=0;
         function commentPost(element) {
-            var firebase= new Firebase(commentUtil);
             var commentField=document.getElementById("comment"+element.id.substring(12));
             var commentContent=commentField.value;
-            var postId=document.getElementById("like"+element.id.substring(12)).name;
+            postId=document.getElementById("like"+element.id.substring(12)).name;
             var url="post-comments/"+postId;
             var postable={
                 "authorId":"9tLEc35JTxRoKhl79wK4JfiNHpE3",
                 "createdDate":(new Date).getTime(),
-                "text": commentContent
+                "text": commentContent,
+                "id":"dummy"
             };
+            var firebase= new Firebase(commentUtil);
             firebase.post(url,postable);
-            alert(JSON.stringify(postable))
         }
         function comment(element){
 
@@ -156,13 +156,21 @@
         }
         function like(element){
             var firebase= new Firebase(likeUtil);
-             firebase.get("posts/"+element.name)
+             firebase.get("post-comments/"+element.name)
         }
         function likeUtil(data) {
             alert(JSON.stringify(data));
         }
         function commentUtil(data){
             alert("Post with id: "+data.name);
+            var id =data.name;
+            var firebase=new Firebase(dummy);
+            url="post-comments/"+postId+"/"+id+"/id";
+
+            firebase.put(url,id)
+        }
+        function dummy(param) {
+            var x=param;
         }
 
 
