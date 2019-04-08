@@ -23,4 +23,14 @@ class Posts:
     def getShowable(self):
         temp=deepcopy(self.__dict__)
         temp['authorName']=firebase.get('users/'+self.authorId,None)['username']
+        temp['comments']=list()
+        result=firebase.get('post-comments/'+self.id,None)
+        if result is not None:
+            for comments in result.items():
+                for i in range(len(comments)):
+                    if i%2==1:
+                        comments[i]['authorName']=firebase.get('users/'+comments[i]['authorId'],None)['username']
+                        comments[i]['profilePic']=firebase.get('users/'+comments[i]['authorId'],None)['photoUrl']
+                temp['comments'].append(comments)
+
         return munchify(temp)
