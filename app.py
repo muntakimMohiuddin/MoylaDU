@@ -35,6 +35,8 @@ def index():
     result = firebase.get('/posts', None)
     for key,value in result.items():
         postlist.append(Posts(key,value).getShowable())
+    print(postlist[0].comments[0])
+
     error = 'You are not logged in'
     dumb = 'dumb'
     # if 'username' in session:
