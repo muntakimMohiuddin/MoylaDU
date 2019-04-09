@@ -93,6 +93,11 @@ class PasswordForm(Form):
     password = StringField('Password')
 
 
+@app.route('/post')
+def post():
+    return render_template('post.html')
+
+
 if __name__ == '__main__':
     app.secret_key = 'SUPER SECRET KEY'
     app.config['SESSION_TYPE'] = 'filesystem'

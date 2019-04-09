@@ -1,0 +1,233 @@
+{% block head %}
+<title>Clean DU</title>
+{% endblock head %}
+{%  extends 'index.html' %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="/static/css/post-input.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/static/js/Firebase.js"></script>
+
+    <style>
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: black;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 3px #999;
+        }
+
+        .my-float {
+            margin-top: 22px;
+        }
+
+
+        .section {
+            -webkit-transform: scale(1);
+            -webkit-transition: all linear 0.5s 0;
+        }
+
+        .modal-open .section {
+            -webkit-filter: blur(3px);
+            -ms-filter: blur(3px);
+            -o-filter: blur(3px);
+            filter: blur(3px);
+            -webkit-transform: scale(0.8);
+
+        }
+    </style>
+
+    <script src="/static/w3.js"></script>
+</head>
+
+<style>
+    #upper {
+        margin-top: 4px;
+        margin-bottom: 5px;
+    }
+
+    .mr {
+
+    }
+
+    .equal {
+        margin-top: 0px;
+    }
+
+    .times {
+
+    }
+
+    .sttimes {
+
+    }
+
+    .status {
+
+    }
+
+    fieldset {
+        border: medium none !important;
+        margin: 0 0 10px;
+        min-width: 100%;
+        padding: 0;
+        width: 100%;
+    }
+
+
+</style>
+<body>
+<main role="main">
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
+
+
+            <div class="card mt-3 shadow">
+
+                <div class="card-header" id="block">
+                    <p align="center"><b>Create a new post</b>
+                    </p>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-row">
+                        <div class="name">Title</div>
+                        <div class="value">
+                            <input class="input--style-6" type="text" id="title">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="name">Description</div>
+                        <div class="value">
+                            <div class="input-group">
+                                <textarea class="textarea--style-6" id="desc" placeholder="Description about the condition of the place."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="name">Add photo</div>
+                        <div class="value">
+                            <div class="input-group js-input-file">
+                                <input class="input-file" type="file" name="file_photo" id="photo_file">
+{#                                <label class="label--file" for="file">Choose photo</label>#}
+{#                                <span class="input-file__info">No photo chosen</span>#}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-footer" align="center">
+                    <button>
+                    <a onclick="create_post()"><i class="fa fa-plus-circle"> Create</i></a>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="/static/js/jquery.min.js" type="2fd2b79c5d46f1e38ad0641a-text/javascript"></script>
+
+    <script src="/static/js/fileupload.js" type="2fd2b79c5d46f1e38ad0641a-text/javascript"></script>
+
+    <script type="text/javascript">
+
+        var image_path;
+        var image_title;
+
+
+        function upload() {
+            var fileRef = document.getElementById("photo_file");
+            var file = fileRef.files[0];
+            var storageRef = firebase.storage().ref('images/'+file.name);
+            image_title = file.name;
+            console.log(storageRef);
+            var task = storageRef.put(file);
+            task.on('state_changed', function progress(snapshot) {
+                var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
+                console.log(percentage);
+            },  function error(err) {
+                console.log("error : "+err);
+            },function complete() {
+
+            });
+        }
+
+        function create_post() {
+            upload();
+            image_path = "https://firebasestorage.googleapis.com/v0/b/fir-basic-9a5d7.appspot.com/o/images%2F16177689_1154837131301276_6330080972678035995_o_7257_1.jpg?alt=media&token=3863937a-09bc-494e-9258-bc03b5b0a902";//storageRef.getDownloadURL();
+            var titleField = document.getElementById("title");
+            var descField = document.getElementById("title");
+            var postable = {
+                "authorId":"9tLEc35JTxRoKhl79wK4JfiNHpE3",
+                "commentsCount":0,
+                "createdDate":(new Date).getTime(),
+                "createdDateText":(new Date).getTime(),
+                "description":descField.value,
+                "hasComplain":"true",
+                "likesCount":0,
+                "watchesCount":0,
+                "title":titleField.value,
+                "imagePath":image_path,
+                "imageTitle":image_title,
+            };
+
+            var fbRef = firebase.database().ref().child('posts').push();
+            var fbKey = fbRef.key;
+            firebase.database().ref().child('posts').child(fbKey).set({
+                "authorId":"9tLEc35JTxRoKhl79wK4JfiNHpE3",
+                "commentsCount":0,
+                "createdDate":(new Date).getTime(),
+                "createdDateText":(new Date).getTime(),
+                "description":descField.value,
+                "hasComplain":"true",
+                "likesCount":0,
+                "watchersCount":0,
+                "title":titleField.value,
+                "imagePath":image_path,
+                "imageTitle":image_title,
+            });
+            console.log(fbRef);
+            console.log(fbKey);
+            console.log(postable);
+
+            window.location.replace('127.0.0.0:5000');
+        }
+
+
+    </script>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+    authDomain: "fir-basic-9a5d7.firebaseapp.com",
+    databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+    projectId: "fir-basic-9a5d7",
+    storageBucket: "fir-basic-9a5d7.appspot.com",
+    messagingSenderId: "463528068065"
+  };
+  firebase.initializeApp(config);
+</script>
+</main>
+</body>
+{% endblock content %}
