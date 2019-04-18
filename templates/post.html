@@ -87,6 +87,22 @@
 
 </style>
 <body>
+
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+    authDomain: "fir-basic-9a5d7.firebaseapp.com",
+    databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+    projectId: "fir-basic-9a5d7",
+    storageBucket: "fir-basic-9a5d7.appspot.com",
+    messagingSenderId: "463528068065"
+  };
+  firebase.initializeApp(config);
+
+</script>
+
 <main role="main">
 
     <div class="row">
@@ -122,7 +138,7 @@
                         <div class="name">Add photo</div>
                         <div class="value">
                             <div class="input-group js-input-file">
-                                <input class="input-file" type="file" name="file_photo" id="photo_file">
+                                <input class="file-select" type="file" name="file_photo" id="photo_file" accept="image/*">
 {#                                <label class="label--file" for="file">Choose photo</label>#}
 {#                                <span class="input-file__info">No photo chosen</span>#}
                             </div>
@@ -131,7 +147,7 @@
 
                 </div>
                 <div class="card-footer" align="center">
-                    <button>
+                    <button class="file-submit">
                     <a onclick="create_post()"><i class="fa fa-plus-circle"> Create</i></a>
                     </button>
                 </div>
@@ -152,27 +168,52 @@
         var image_path;
         var image_title;
 
-
-        function upload() {
-            var fileRef = document.getElementById("photo_file");
-            var file = fileRef.files[0];
-            var storageRef = firebase.storage().ref('images/'+file.name);
-            image_title = file.name;
-            console.log(storageRef);
-            var task = storageRef.put(file);
-            task.on('state_changed', function progress(snapshot) {
-                var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                console.log(percentage);
-            },  function error(err) {
-                console.log("error : "+err);
-            },function complete() {
-
-            });
+        document.querySelector('.file-select').addEventListener('change', handleFileUploadChange.bind(this));
+        document.querySelector('.file-submit').addEventListener('click', handleFileUploadSubmit.bind(this));
+        let selectedFile;
+        function handleFileUploadChange(e) {
+            selectedFile = e.target.files[0];
         }
 
+        function handleFileUploadSubmit(e) {
+            var storage = firebase.storage();
+            var storageRef = storage.ref();
+
+            const uploadTask = storageRef.child(`${selectedFile.name}`).put(selectedFile);
+
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                function(snapshot) {
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                        case firebase.storage.TaskState.PAUSED:
+                            console.log('Upload is paused');
+                            break;
+	                    case firebase.storage.TaskState.RUNNING: // or 'running'
+                            console.log('Upload is running');
+                            break;
+                    }
+                }, function(error) {
+                    switch (error.code) {
+                        case 'storage/unauthorized':
+                            break;
+                        case 'storage/canceled':
+                            break;
+                        case 'storage/unknown':
+                            break;
+                    }
+                }, function() {
+                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                        console.log('File available at', downloadURL);
+                        image_path = downloadURL;
+                        create_post();
+
+                    });
+                });
+        };
+
         function create_post() {
-            upload();
-            image_path = "https://firebasestorage.googleapis.com/v0/b/fir-basic-9a5d7.appspot.com/o/images%2F16177689_1154837131301276_6330080972678035995_o_7257_1.jpg?alt=media&token=3863937a-09bc-494e-9258-bc03b5b0a902";//storageRef.getDownloadURL();
+            //image_path = "https://firebasestorage.googleapis.com/v0/b/fir-basic-9a5d7.appspot.com/o/images%2F16177689_1154837131301276_6330080972678035995_o_7257_1.jpg?alt=media&token=3863937a-09bc-494e-9258-bc03b5b0a902";//storageRef.getDownloadURL();
             var titleField = document.getElementById("title");
             var descField = document.getElementById("title");
             var postable = {
@@ -208,26 +249,13 @@
             console.log(fbKey);
             console.log(postable);
 
-            window.location.replace('127.0.0.0:5000');
+            window.location.href = "http://127.0.0.1:5000";
         }
 
 
     </script>
 
 
-<script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
-    authDomain: "fir-basic-9a5d7.firebaseapp.com",
-    databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
-    projectId: "fir-basic-9a5d7",
-    storageBucket: "fir-basic-9a5d7.appspot.com",
-    messagingSenderId: "463528068065"
-  };
-  firebase.initializeApp(config);
-</script>
 </main>
 </body>
 {% endblock content %}
