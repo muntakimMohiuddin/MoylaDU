@@ -88,15 +88,19 @@ def edit_profile():
     halls = open("templates/includes/halls.txt").read().split("\n")
     departments=Utils.getFacultywiseDepartments()
     print(departments)
+    userFaculty=Utils.getFacultyFromDepartment(user.department)
+    user.department=Utils.resolve(user.department)
+    print(userFaculty)
     if "faculty" in request.form:
         faculty=request.form['faculty']
         print(faculty)
         departments=departments[faculty]
         return jsonify(departments)
-    return render_template('edit_profile.html',user=user,halls=halls,faculties=departments.keys())
+    return render_template('edit_profile.html',user=user,halls=halls,faculties=departments.keys(),departments=departments[userFaculty],userFaculty=userFaculty)
 
-#
-#
+@app.route('/submitProfile',methods=['GET', 'POST'])
+def submit_profile():
+    pass
 # @app.route('/posts/<id>')
 # def posts(id):
 #     if not ('username' in session):

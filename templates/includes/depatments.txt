@@ -48,9 +48,9 @@ Department of Ceramics
 Department of Sculpture
 Department of Craft
 Department of History of Art
-Faculty of Law
+#Faculty of Law
 Department of Law
-Faculty of Medicine
+#Faculty of Medicine
 Bachelor of physiotherapy(BPT)
 #Faculty of Pharmacy
 Department of Pharmaceutical Chemistry
