@@ -1,0 +1,96 @@
+{% block head %}
+<title>Clean DU</title>
+{% endblock head %}
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="span3 well">
+        <center>
+            <a href="#myModal" data-toggle="modal"><img src={{user.photoUrl}} name="aboutme" width="140" height="140"
+                                                        class="img-circle"></a>
+            <h3>{{user.username}}</h3>
+            <em>click {{user.username.split(" ")[0]+"\'s"}} profile picture for more</em>
+        </center>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <center>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" id="myModalLabel">More About {{user.username}}</h4>
+                    </div>
+                </center>
+                <center>
+                    <div class="modal-body">
+                        <img src={{user.photoUrl}} name="aboutme" width="140" height="140" border="0"
+                             class="img-circle"></a>
+                        <h3 class="media-heading">{{user.username}}
+                            <small>{{user.department}}</small>
+                        </h3>
+                        <span><strong>Skills: </strong></span>
+                        <span class="label label-warning">Cleaning</span>
+                        <span class="label label-info">Crew</span>
+                        <span class="label label-info">Vehicle</span>
+                        <span class="label label-success">Influnce</span>
+                        <hr>
+                        <p class="text-left"><strong>Department: </strong>
+                            {{user.department}}
+
+                            <br>
+                        <p class="text-left"><strong>Roll: </strong>
+                            {{user.roll}}
+
+                            <br>
+                        <p class="text-left"><strong>Hall: </strong>
+                            {{user.hall}}
+
+                            <br>
+                        <p class="text-left"><strong>Session: </strong>
+                            {{user.session}}
+
+                            <br>
+                        <p class="text-left"><strong>Email: </strong>
+                            {{user.email}}
+
+                            <br>
+                    </div>
+                </center>
+
+                <div class="modal-footer">
+                    <center>
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            I've seen enough about
+                            {%if not edit %}
+                            {{user.username}}
+                            {%else%}
+                            "myself"
+                            {% endif %}
+                        </button>
+                        {%if edit %}
+                        <button type="button" onclick="f()" class="btn btn-primary">Edit</button>
+                        {% endif %}
+                    </center>
+                    <script>
+                        function f() {
+                         currentUrl= window.location.pathname;
+                         newUrl=currentUrl.split('/');
+                            newUrl=newUrl[0]+'/editProfile';
+                            window.location.replace(newUrl);
+                        }</script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock content %}

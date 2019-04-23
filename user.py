@@ -1,7 +1,7 @@
 class User:
     def __init__(self,user_obj):
         self.id=user_obj['id']
-        self.department=user_obj['department']
+        self.department=user_obj['dept']
         self.hall=user_obj['hall']
         self.email=user_obj['email']
         self.photoUrl=user_obj['photoUrl']

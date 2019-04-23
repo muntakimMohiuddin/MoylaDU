@@ -1,47 +1,48 @@
-{% block head %}
-{% endblock head %}
-{%  extends 'index.html' %}
-{% block content %}
+<html>
+
 <head>
-   <link rel="stylesheet" type="text/css" href="/static/login.css">
 </head>
-   <main role="main" class="container">
-      <div class="row">
-           <div class="col-md-2">
-           </div>
-         <div class="col-md-10">
-            {% if dialogue=='Wrong Password' %}
-            <SCRIPT Language="JavaScript">
-               alert('Wrong Password');
-            </SCRIPT>
-            {% endif %}
-            {% if dialogue=='No such username exist' %}
-            <SCRIPT Language="JavaScript">
-               alert('No such username exist');
-            </SCRIPT>
-            {% endif %}
-            {%  from  "includes/_formhelpers.html" import render_field %}
-            <div class="lohinbox">
-               <img src="/static/coder_avatar.jpeg" class="coderavatar">
-               <h1 class="lead" align="center" > <font color="white" size="8px"><b>Sign in</b></font></h1>
-               <form method="POST" action="">
-                  <div class="form-group" >
-                     <font color="white">
-                     {{render_field(form.username, class_="form-control")}}
-                     </font>
-                  </div>
-                  <div class="form-group" >
-                     <font color="white">
-                     {{render_field(form.password, class_="form-control")}}
-                     </font>
-                  </div>
-                  <p align="center"><input type="submit" class="btn btn-primary" value="Submit"></p>
-               </form>
-            </div>
-         </div>
-      </div>
-   </main>
-    <script>
-        highlight("login");
-    </script>
-{% endblock content %}
+
+<body>
+  <h1>hello <span id="name"></span></h1>
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+    authDomain: "fir-basic-9a5d7.firebaseapp.com",
+    databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+    projectId: "fir-basic-9a5d7",
+    storageBucket: "fir-basic-9a5d7.appspot.com",
+    messagingSenderId: "463528068065"
+  };
+  firebase.initializeApp(config);
+
+  function login() {
+
+    function newLoginHappened(user) {
+      if (user) {
+        app(user);
+      } else {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+      }
+
+    }
+    firebase.auth().onAuthStateChanged(newLoginHappened);
+  }
+
+  function app(user) {
+    //user.displayeName
+    //user.email
+    //user.photoURL
+    //user.uid
+    document.getElementById("name").innerHTML = user.displayName;
+  }
+
+  window.onload = login;
+</script>
+
+</html>
