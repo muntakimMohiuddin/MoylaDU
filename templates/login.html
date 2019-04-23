@@ -1,47 +1,72 @@
-{% block head %}
-{% endblock head %}
-{%  extends 'index.html' %}
-{% block content %}
+<!--{% block head %}-->
+<!--{% endblock head %}-->
+<!--{%  extends 'index.html' %}-->
+<!--{% block content %}-->
+<!--<head>-->
+   <!--&lt;!&ndash;<link rel="stylesheet" type="text/css" href="/static/login.css">&ndash;&gt;-->
+   <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
+    <!--<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>-->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+    <!--<script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>-->
+<!--</head>-->
+   <!--<main role="main" class="container">-->
+      <!--<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">-->
+                    <!--<button class="g-signin2" data-onsuccess="onSignIn"  > Sign In with Google</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--<script>-->
+      <!--function onSignIn(googleUser) {-->
+        <!--// Useful data for your client-side scripts:-->
+        <!--var profile = googleUser.getBasicProfile();-->
+        <!--$.ajax({-->
+        <!--type: "POST",-->
+        <!--url: "/login",-->
+        <!--data:{ "data": googleUser.getAuthResponse().id_token-->
+        <!--},-->
+
+      <!--});-->
+
+
+
+
+
+      <!--}-->
+    <!--</script>-->
+   <!--</main>-->
+    <!--<script>-->
+        <!--highlight("login");-->
+    <!--</script>-->
+<!--{% endblock content %}-->
+
+<html>
 <head>
-   <link rel="stylesheet" type="text/css" href="/static/login.css">
+  <meta name="google-signin-client_id" content="463528068065-ch3ofdl6tg0q311bmu0v821o6aed2bgc.apps.googleusercontent.com">
 </head>
-   <main role="main" class="container">
-      <div class="row">
-           <div class="col-md-2">
-           </div>
-         <div class="col-md-10">
-            {% if dialogue=='Wrong Password' %}
-            <SCRIPT Language="JavaScript">
-               alert('Wrong Password');
-            </SCRIPT>
-            {% endif %}
-            {% if dialogue=='No such username exist' %}
-            <SCRIPT Language="JavaScript">
-               alert('No such username exist');
-            </SCRIPT>
-            {% endif %}
-            {%  from  "includes/_formhelpers.html" import render_field %}
-            <div class="lohinbox">
-               <img src="/static/coder_avatar.jpeg" class="coderavatar">
-               <h1 class="lead" align="center" > <font color="white" size="8px"><b>Sign in</b></font></h1>
-               <form method="POST" action="">
-                  <div class="form-group" >
-                     <font color="white">
-                     {{render_field(form.username, class_="form-control")}}
-                     </font>
-                  </div>
-                  <div class="form-group" >
-                     <font color="white">
-                     {{render_field(form.password, class_="form-control")}}
-                     </font>
-                  </div>
-                  <p align="center"><input type="submit" class="btn btn-primary" value="Submit"></p>
-               </form>
-            </div>
-         </div>
-      </div>
-   </main>
-    <script>
-        highlight("login");
-    </script>
-{% endblock content %}
+<body>
+  <div id="my-signin2">In</div>
+  <script>
+    function onSuccess(googleUser) {
+      console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+    }
+    function onFailure(error) {
+      console.log(error);
+    }
+    function renderButton() {
+      gapi.signin2.render('my-signin2', {
+        'scope': 'profile email',
+        'width': 240,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': onSuccess,
+        'onfailure': onFailure
+      });
+      renderButton();
+    }
+  </script>
+
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+</body>
+</html>

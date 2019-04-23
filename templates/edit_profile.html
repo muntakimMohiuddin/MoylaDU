@@ -1,0 +1,189 @@
+{% block head %}
+<title>Clean DU</title>
+{% endblock head %}
+{%  extends 'index.html' %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="/static/js/Firebase.js"></script>
+    <style>
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: black;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 3px #999;
+        }
+
+        .my-float {
+            margin-top: 22px;
+        }
+
+
+        .section {
+            -webkit-transform: scale(1);
+            -webkit-transition: all linear 0.5s 0;
+        }
+
+        .modal-open .section {
+            -webkit-filter: blur(3px);
+            -ms-filter: blur(3px);
+            -o-filter: blur(3px);
+            filter: blur(3px);
+            -webkit-transform: scale(0.8);
+
+        }
+
+        label {
+            display: inline-block;
+            width: 140px;
+            text-align: right;
+        }
+
+        ​
+    </style>
+    <!--<meta http-equiv="x-ua-compatible" content="IE-edge">-->
+    <!--<meta name="viewport" content="width-device-width, initial-scale=1">-->
+    <script src="/static/w3.js"></script>
+</head>
+
+<style>
+    #upper {
+        margin-top: 4px;
+        margin-bottom: 5px;
+    }
+
+    .mr {
+
+    }
+
+    .equal {
+        margin-top: 0px;
+    }
+
+    .times {
+
+    }
+
+    .sttimes {
+
+    }
+
+    .status {
+
+    }
+</style>
+<body>
+<main role="main">
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
+            <center>
+                <h1>Edit Profile</h1></center>
+            <div class="block">
+                <label>Name:</label>
+                <input style="text-align: center" type="search" value="{{user.username}}">
+            </div>
+            <div class="block">
+                <label>Roll:</label>
+                <input style="text-align: center" type="number" value="{{user.roll|int}}">
+            </div>
+            <div class="block">
+                <label>Faculty:</label>
+                <span>
+                   <select id="faculty" name="faculty">
+                       <option value='None'> Choose Faculty</option>
+                {%for faculty in faculties%}
+
+                      <option value='{{faculty}}' id='{{faculty}}'> {{faculty}}</option>
+                       }
+                       {%endfor%}
+                       </select>
+                       </span>
+
+
+            </div>
+
+            <div class="block" hidden id="department_block" >
+                <label>Department:</label>
+                <span>
+                    <select id="department" name="department">
+                {%for department in departments%}
+                      <option id="{{department}}" value='{{department}}'> {{department}}</option>
+                       }
+                       {%endfor%}
+                       </select>
+                       </span>
+            </div>
+            <div class="block">
+                <label>Hall:</label>
+                <span>
+                   <select id="hall" name="hall">
+                       {%for hall in halls%}
+                       {%if hall == user.hall%}
+                      <option value='{{hall}}' SELECTED> {{hall}}</option>
+                       {%else%}
+                       <option value='{{hall}}'> {{hall}}</option>
+                       {%endif%}
+                       {%endfor%}
+                   </select>
+                       </span>
+            </div>
+            <div class="block">
+                <label>Email:</label>
+                <input style="text-align: center" type="email" value="{{user.email}}">
+            </div>
+            <div class="block">
+                <label>Session:</label>
+                <input style="text-align: center" type="number" value="{{user.session.split('-')[0]}}">
+                <input style="text-align: center" type="number" value="{{user.session.split('-')[1]}}">
+            </div>
+            <div class="block">
+                <label>Photo:</label>
+                <img width="300" src="{{user.photoUrl}}">
+                <button class="btn-primary">change</button>
+            </div>
+            <div class="block">
+                <label>Name:</label>
+                <input style="text-align: center" type="search" value="{{user.username}}">
+            </div>
+        </div>
+
+
+    </div>
+
+</main>
+</body>
+<script>
+    $(faculty).on('change', function () {
+        var id = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url: '/editProfile',
+            data: {"faculty": id},
+            success: function (data) {
+                $(department)
+                    .empty();
+                 $(department).append('<option value="' + '.......'+ '">' +'.......' + '</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $(department).append('<option value="' + data[i] + '">' + data[i] + '</option>');
+                }
+                document.getElementById("department_block").hidden=false;
+
+
+            }
+        });
+
+    })
+</script>
+{% endblock content %}

@@ -1,0 +1,89 @@
+Faculty of Arts
+Department of Bangla
+Department of English
+Department of Persian Language and Literature
+Department of Philosophy
+Department of History
+Department of Arabic
+Department of Islamic Study
+Department of Islamic History and Culture
+Department of Sanskrit and Pali
+Department of Information Science and Library Management
+Department of Languages and Linguistics
+Department of Theater and Music
+Department of World Religion and Culture
+#Faculty of Business Studies
+Department of Management Studies
+Department of Accounting & Information Systems
+Department of Marketing
+Department of Finance
+Department of Banking and Insurance
+Department of Management Information Systems
+Department of International Business
+Department of Tourism and Hospitality Management
+Department of Organization Strategy and Leadership
+#Faculty of Biological Science
+Department of Soil, Water and Environment
+Department of Botany
+Department of Zoology
+Department of Biochemistry and Molecular Biology
+Department of Psychology
+Department of Microbiology
+Department of Fisheries Science
+Department of Medical Psychology
+Department of Genetic Engineering and Biotechnology
+Department of Educational Psychology
+#Faculty of Engineering and Technology
+Department of Electrical and Electronic Engineering
+Department of Applied Chemistry and Chemical Engineering
+Department of Computer Science and Engineering
+Department of Nuclear Engineering
+Department of Robotics and Mechatronics
+#Faculty of Fine Arts
+Department of Drawing and Painting
+Department of Graphic Design
+Department of Printmaking
+Department of Oriental Art
+Department of Ceramics
+Department of Sculpture
+Department of Craft
+Department of History of Art
+Faculty of Law
+Department of Law
+Faculty of Medicine
+Bachelor of physiotherapy(BPT)
+#Faculty of Pharmacy
+Department of Pharmaceutical Chemistry
+Department of Clinical Pharmacy and Pharmacology
+Department of Pharmaceutical Technology
+Department of Pharmacy
+#Faculty of Science
+Department of Physics
+Department of Mathematics
+Department of Chemistry
+Department of Biomedical Physics and Technology
+Department of Theoretical Physics
+Department of Applied Mathematics
+Department of Statistics
+Department of Theoretical and Computational Chemistry
+#Faculty of Social Sciences
+Department of Economics
+Institute of Health Economics
+Department of Political Science
+Department of International Relations
+Department of Anthropology
+Department of Public Administration
+Department of Mass Communication and Journalism
+Department of Communication Disorders
+Department of Printing and Publication Studies
+Department of Television, Film and Photography
+Department of Sociology
+Department of Development Studies
+Department of Criminology
+Department of Japanese Studies
+#Faculty of Earth and Environmental Sciences
+Department of geography and environment
+Department of Geology
+Department of oceanography
+Department of Disaster Science and Management
+Department of Meteorology

@@ -154,9 +154,13 @@
          <li id="register">
             <a href="/register"><i class="fa fa-university"></i>           Sign Up</a>
          </li>
+
+          <li id="user1">
+            <a href="/profile/myself"><i id="profile1" class="fa fa-user-circle-o"></i>         {{session['username']}} </a>
+         </li>
          {% else %}
           <li id="user">
-            <a href="/profile/myself"><i id="profile" class="fa fa-user-circle-o"></i>         {{session['username']}}</a>
+            <a href="/profile/myself"><i id="profile" class="fa fa-user-circle-o"></i>         {{session['username']}} </a>
          </li>
          <li>
              <a href="/logout"><i class="fa fa-sign-out"></i>         Sign Out</a>
@@ -183,8 +187,8 @@
                      <p>
                         <strong>Adress:</strong> University of Dhaka
                      </p>
-                     <p><strong>Email:</strong> cleandu@example.com</p>
-                     <p><strong>Tel.:</strong> (888) 888 8888</p>
+                     <p><strong>Email:</strong> cleandu@gmail.com</p>
+                     <p><strong>Tel.:</strong> +8801521333695</p>
                      <div>
                         <br />
                         <a href="https://www.facebook.com/asifahmedshudip"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
@@ -201,8 +205,8 @@
                </div>
             </div>
          </footer>
-               <script src="/static/For%20Table/jquery.js"></script>
-               <script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
+               <script src="/static/vendor/jquery/jquery.js"></script>
+               <script src="/cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
                <script type="text/javascript">
 
                    if (window.location.href.includes("onlineide") || window.location.href.includes("editor")) {
