@@ -165,7 +165,7 @@
                 </div>
                 <div class="block">
                     <label></label>
-                    <button style="margin-top: 15px "  class="btn-primary">Sumbit</button>
+                    <button style="margin-top: 15px " id="submit" class="btn-primary">Sumbit</button>
                 </div>
             </div>
 
@@ -176,6 +176,24 @@
 </body>
 <script>
     $(faculty).on('change', function () {
+        var id = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url: '/editProfile',
+            data: {"faculty": id},
+            success: function (data) {
+                $(department)
+                    .empty();
+                $(department).append('<option value="' + '...Chose Department...' + '">' + '.......' + '</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $(department).append('<option value="' + data[i] + '">' + data[i] + '</option>');
+                }
+                document.getElementById("department_block").hidden = false;
+
+
+            }
+        });
+        $(submit).on('click', function () {
         var id = $(this).val();
         $.ajax({
             type: 'POST',
