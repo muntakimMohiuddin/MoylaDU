@@ -20,16 +20,16 @@ UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__)) + '/static/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
 ALLOWED_CATEGORY = {'ACM', 'IOI'}
 import uuid
-import pyrebase
-config = {
-  "apiKey": "AIzaSyCp_8Wb0RB-0AhWpsvVahxez2nkQWa1RXc",
-  "authDomain": "fir-basic-9a5d7.firebaseapp.com",
-  "databaseURL": "https://fir-basic-9a5d7.firebaseio.com",
-  "storageBucket": "fir-basic-9a5d7.appspot.com",
-  "serviceAccount": "fir-basic-9a5d7-firebase-adminsdk-0jn0d-1d27894db7.json"
-}
-
-firebaseAuth = pyrebase.initialize_app(config)
+# import pyrebase
+# config = {
+#   "apiKey": "AIzaSyCp_8Wb0RB-0AhWpsvVahxez2nkQWa1RXc",
+#   "authDomain": "fir-basic-9a5d7.firebaseapp.com",
+#   "databaseURL": "https://fir-basic-9a5d7.firebaseio.com",
+#   "storageBucket": "fir-basic-9a5d7.appspot.com",
+#   "serviceAccount": "fir-basic-9a5d7-firebase-adminsdk-0jn0d-1d27894db7.json"
+# }
+#
+# firebaseAuth = pyrebase.initialize_app(config)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 firebase=firebase.FirebaseApplication('https://fir-basic-9a5d7.firebaseio.com/')
 app.config['CKEDITOR_SERVE_LOCAL'] = True
@@ -61,7 +61,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    googleAuth=firebaseAuth.auth()
+    # googleAuth=firebaseAuth.auth()
     if request.method=="POST":
         print(request.data)
     return render_template('login.html')
