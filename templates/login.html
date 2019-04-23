@@ -1,72 +1,48 @@
-<!--{% block head %}-->
-<!--{% endblock head %}-->
-<!--{%  extends 'index.html' %}-->
-<!--{% block content %}-->
-<!--<head>-->
-   <!--&lt;!&ndash;<link rel="stylesheet" type="text/css" href="/static/login.css">&ndash;&gt;-->
-   <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
-    <!--<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>-->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
-    <!--<script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>-->
-<!--</head>-->
-   <!--<main role="main" class="container">-->
-      <!--<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">-->
-                    <!--<button class="g-signin2" data-onsuccess="onSignIn"  > Sign In with Google</button>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--<script>-->
-      <!--function onSignIn(googleUser) {-->
-        <!--// Useful data for your client-side scripts:-->
-        <!--var profile = googleUser.getBasicProfile();-->
-        <!--$.ajax({-->
-        <!--type: "POST",-->
-        <!--url: "/login",-->
-        <!--data:{ "data": googleUser.getAuthResponse().id_token-->
-        <!--},-->
-
-      <!--});-->
-
-
-
-
-
-      <!--}-->
-    <!--</script>-->
-   <!--</main>-->
-    <!--<script>-->
-        <!--highlight("login");-->
-    <!--</script>-->
-<!--{% endblock content %}-->
-
 <html>
-<head>
-  <meta name="google-signin-client_id" content="463528068065-ch3ofdl6tg0q311bmu0v821o6aed2bgc.apps.googleusercontent.com">
-</head>
-<body>
-  <div id="my-signin2">In</div>
-  <script>
-    function onSuccess(googleUser) {
-      console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-    }
-    function onFailure(error) {
-      console.log(error);
-    }
-    function renderButton() {
-      gapi.signin2.render('my-signin2', {
-        'scope': 'profile email',
-        'width': 240,
-        'height': 50,
-        'longtitle': true,
-        'theme': 'dark',
-        'onsuccess': onSuccess,
-        'onfailure': onFailure
-      });
-      renderButton();
-    }
-  </script>
 
-  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+<head>
+</head>
+
+<body>
+  <h1>hello <span id="name"></span></h1>
 </body>
+
+<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+    authDomain: "fir-basic-9a5d7.firebaseapp.com",
+    databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+    projectId: "fir-basic-9a5d7",
+    storageBucket: "fir-basic-9a5d7.appspot.com",
+    messagingSenderId: "463528068065"
+  };
+  firebase.initializeApp(config);
+
+  function login() {
+
+    function newLoginHappened(user) {
+      if (user) {
+        app(user);
+      } else {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+      }
+
+    }
+    firebase.auth().onAuthStateChanged(newLoginHappened);
+  }
+
+  function app(user) {
+    //user.displayeName
+    //user.email
+    //user.photoURL
+    //user.uid
+    document.getElementById("name").innerHTML = user.displayName;
+  }
+
+  window.onload = login;
+</script>
+
 </html>
