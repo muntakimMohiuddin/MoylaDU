@@ -1,0 +1,226 @@
+{% block head %}
+{% endblock head %}
+{% extends 'index.html' %}
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/register.css" media="all">
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
+    <script>
+      var config = {
+        apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+        authDomain: "fir-basic-9a5d7.firebaseapp.com",
+        databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+        projectId: "fir-basic-9a5d7",
+        storageBucket: "fir-basic-9a5d7.appspot.com",
+        messagingSenderId: "463528068065"
+      };
+      firebase.initializeApp(config);
+    </script>
+</head>
+<body>
+<main role="main" class="container">
+        <div class="main-w3layouts wrapper">
+            <h1 align="center">Register</h1>
+            <div class="main-agileinfo">
+                <div class="agileits-top">
+                    <input class="text" type="text" name="Username" placeholder="Name" required="" id="name" onkeyup="check_name(this.value);">
+                    <div class="wthree-text" id="name_d" style="display: none;">
+                        <label class="anim">
+                            <span id="name_v"></span>
+                        </label>
+                    </div>
+
+                    <input class="text email" type="email" name="email" placeholder="Email" required="" id="email" onkeyup="check_mail(this.value);">
+                    <div class="wthree-text" id="mail_d" style="display: none;">
+                        <label class="anim">
+                            <span id="mail_v"></span>
+                        </label>
+                    </div>
+
+{#                    <input class="text" type="text" name="Username" placeholder="Name" required="">#}
+{#                    <input class="text" type="text" name="Username" placeholder="Name" required="">#}
+{#                    <input class="text" type="text" name="Username" placeholder="Name" required="">#}
+
+                    <input class="text" type="password" name="password" placeholder="Password" required="" id="pass" onkeyup="check(this.value);">
+                    <div class="wthree-text" id="pass_l_d" style="display: none;">
+                        <label class="anim">
+                            <span id="pass_len"></span>
+                        </label>
+                    </div>
+
+                    <input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="" id="re_pass" onkeyup="re_check(this.value);">
+                    <div class="wthree-text" id="pass_s_d" style="display: none;">
+                        <label class="anim">
+                            <span id="pass_stat"></span>
+                        </label>
+                    </div>
+
+                    <input type="submit" value="SIGNUP" onclick="sign_me_up();">
+                </div>
+            </div>
+        </div>
+</main>
+<script>
+
+    function check_name(val) {
+
+        var nameV = document.getElementById('name_v');
+        if(val.length < 1){
+            document.getElementById('name_d').style.display = 'block';
+            nameV.innerHTML = "Name can't be empty";
+            console.log("RETURNED invalid name");
+            return;
+        }
+        else {
+            document.getElementById('name_d').style.display = 'none';
+            return;
+        }
+    }
+
+    function validateEmail(address){
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(address.match(mailformat)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function check_mail(val) {
+
+        var mailV = document.getElementById('mail_v');
+        if(validateEmail(val) == false){
+            document.getElementById('mail_d').style.display = 'block';
+            mailV.innerHTML = "Wrong email address";
+            console.log("RETURNED invalid email");
+            return;
+        }
+        else {
+            document.getElementById('mail_d').style.display = 'none';
+            return;
+        }
+    }
+    
+    function check(pss) {
+        var passLen = document.getElementById('pass_len');
+        if(pss.length < 6){
+            document.getElementById('pass_l_d').style.display = 'block';
+            passLen.innerHTML = "Too short";
+            console.log("RETURNED invalid pass");
+            return;
+        }
+        else {
+            document.getElementById('pass_l_d').style.display = 'none';
+            return;
+        }
+    }
+
+    function re_check(rePassV) {
+        var passV = document.getElementById('pass').value;
+
+        var passST = document.getElementById('pass_stat');
+
+        if(passV != rePassV){
+            document.getElementById('pass_s_d').style.display = 'block';
+            console.log("RETURNED invalid pass match");
+            passST.innerHTML = "Passwords do not match";
+            return;
+        }
+        else {
+            document.getElementById('pass_s_d').style.display = 'none';
+            return;
+        }
+    }
+
+    
+    function sign_me_up() {
+        var nameField = document.getElementById('name').value;
+        var emailField = document.getElementById('email').value;
+        var passField = document.getElementById('pass').value;
+        var rePassField = document.getElementById('re_pass').value;
+
+        var passLen = document.getElementById('pass_len');
+
+        {#if(nameField.length<1){#}
+        {#    //re enter data#}
+        {#    console.log("RETURNED invalid name");#}
+        {#    return;#}
+        {#if(validateEmail(emailField) == false){#}
+        {#    //#}
+        {#    console.log("RETURNED invalid email");#}
+        {#    return;#}
+        {#if(passField.length<6){#}
+        {#    //#}
+        {#    console.log("RETURNED invalid pass");#}
+        {#    return;#}
+        {#if(passField != rePassField){#}
+        {#    //#}
+        {#    console.log("RETURNED pass missmatch");#}
+        {#    return;#}
+
+        console.log(nameField+" : "+emailField+" : "+passField +" : "+rePassField );
+
+        check_name(nameField);
+        check_mail(emailField);
+        check(passField);
+        re_check(rePassField);
+
+        var checkEmail = false;
+
+        var database = firebase.database();
+        var dataRef = database.ref('user_credential');
+        dataRef.on('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                var childData = childSnapshot.val();
+                var email = childData.email;
+
+                if(email == emailField){
+                    checkEmail = true;
+                }
+
+                console.log(email);
+            });
+
+            if(checkEmail){
+                //re enter data
+                document.getElementById('mail_d').style.display = 'block';
+                document.getElementById('mail_v').innerHTML = "This email address already exist!";
+                console.log("RETURNED invalid existing email");
+                return;
+            }
+            else {
+                //insert to db
+                var fbRef = firebase.database().ref().child('user_credential').push();
+                var fbKey = fbRef.key;
+                firebase.database().ref().child('user_credential').child(fbKey).set({
+                    "email":emailField,
+                    "pass":passField
+                });
+
+                firebase.database().ref().child('users').child(fbKey).set({
+                    "dept":"",
+                    "email":emailField,
+                    "hall":"",
+                    "id":fbKey,
+                    "likesCount":0,
+                    "photoUrl":"",
+                    "roll":"",
+                    "session":"",
+                    "username":nameField
+                });
+                console.log("Account created");
+
+                //goto login page
+                window.location.replace("/login");
+            }
+        });
+    }
+</script>
+</body>
+{% endblock content %}

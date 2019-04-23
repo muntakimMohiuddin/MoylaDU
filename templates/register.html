@@ -1,64 +1,118 @@
-{% block head %}
-{% endblock head %}
-{% extends 'index.html' %}
-{% block content %}
-<head>
-   <link rel="stylesheet" type="text/css" href="/static/register.css">
-</head>
-<body>
-   <main role="main">
-      <div class="row">
-         <div class="col-md-3">
-         </div>
-         <div class="col-md-9">
-            {% if dialoge=='There is alredy an account in this username' %}
-            <SCRIPT Language="JavaScript">
-               alert('There is alredy an account in this username');
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Sample FirebaseUI App</title>
 
-            </SCRIPT>
-            {% endif %}
-            {% from  "includes/_formhelpers.html" import render_field %}
-            <div class="registerbox">
-               <h1 class="lead" align="center" size="9px">
-                  <font color="white">
-                  Create New Account
-                  </font>
-               </h1>
-               <img src="/static/coder_avatar.jpeg" class="coderavatar">
-               <form method="POST" action="">
-                  <div class="form-group">
-                     <font color="white">
-                     {{ render_field(form.name, class_="form-control") }}
-                     </font>>
-                  </div>
-                  <div class="form-group">
-                     <font color="white">
-                     {{ render_field(form.email, class_="form-control") }}
-                     </font>
-                  </div>
-                  <div class="form-group">
-                     <font color="white">
-                     {{ render_field(form.username, class_="form-control") }}
-                     </font>
-                  </div>
-                  <div class="form-group">
-                     <font color="white">
-                     {{ render_field(form.password, class_="form-control") }}
-                     </font>
-                  </div>
-                  <div class="form-group">
-                     <font color="white">
-                     {{ render_field(form.confirm, class_="form-control") }}
-                     </font>>
-                  </div>
-                  <p align="center"><input type="submit" class="btn btn-primary" value="Submit"></p>
-               </form>
-            </div>
-         </div>
-      </div>
-   </main>
-<script>
-    highlight("register");
-</script>
-</body>
-{% endblock content %}
+      <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+      <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+      <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
+      <script>
+          var config = {
+            apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+            authDomain: "fir-basic-9a5d7.firebaseapp.com",
+            databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+            projectId: "fir-basic-9a5d7",
+            storageBucket: "fir-basic-9a5d7.appspot.com",
+            messagingSenderId: "463528068065"
+          }
+          firebase.initializeApp(config);
+      </script>
+
+    <script type="text/javascript">
+        initApp = function() {
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    var email = user.email;
+                    var photoURL = user.photoURL;
+                    var uid = user.uid;
+
+                    var oldUser = false;
+
+                    var query = firebase.database().ref("users").orderByKey();
+                    query.once("value").then(function (snapshot) {
+                        snapshot.forEach(function (childSnapshot) {
+                            var key = childSnapshot.key;
+                            if(key==uid){
+                                oldUser = true;
+                            }
+                        });
+                    });
+
+                    var fbRef = firebase.database().ref().child('users');
+                    if(oldUser==false){
+                        fbRef.child(uid).set({
+                            "dept": "",
+                            "email":email,
+                            "hall":"",
+                            "id":uid,
+                            "likesCount":0,
+                            "photoUrl":photoURL,
+                            "roll":"",
+                            "session":"",
+                            "username":displayName
+                        });
+                        window.location.replace("/profile/uid");
+                    }
+                } else {
+
+                    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+                    ui.disableAutoSignIn();
+
+                    function getUiConfig() {
+                        return{
+                            callbacks: {
+                                signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                                    if (authResult.user) {
+                                        console.log("Old user");
+                                        console.log(authResult.user);//handleSignedInUser(authResult.user);
+                                    }
+                                    if (authResult.additionalUserInfo) {
+                                                //document.getElementById('is-new-user').textContent = authResult.additionalUserInfo.isNewUser ? 'New User' : 'Existing User';
+                                        console.log("New user");
+                                        console.log(authResult.additionalUserInfo);
+                                    }
+                                            // Do not redirect.
+                                    return false;
+                                }
+                            },
+                            signInOptions: [
+                                        // Leave the lines as is for the providers you want to offer your users.
+                                firebase.auth.GoogleAuthProvider.PROVIDER_ID
+                            ],
+                            tosUrl: '<your-tos-url>',
+                            privacyPolicyUrl: function() {
+                                window.location.assign('<your-privacy-policy-url>');
+                            }
+                        }
+                    }
+
+                    ui.reset();
+                    ui.start('#firebaseui-auth-container', getUiConfig());
+
+                    {#document.getElementById('sign-in-status').textContent = 'Signed out';#}
+                    {#document.getElementById('sign-in').textContent = 'Sign in';#}
+                    {#document.getElementById('account-details').textContent = 'null';#}
+                }
+                }, function(error) {
+                console.log(error);
+            });
+        };
+
+        window.addEventListener('load', function() {
+            initApp()
+        });
+    </script>
+  </head>
+  <body>
+    <h1 align="center">Sign up:</h1>
+    <div id="firebaseui-auth-container"></div>
+    <pre id="account-details"></pre>
+
+
+
+  </body>
+</html>

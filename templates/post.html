@@ -177,7 +177,9 @@
 
         function handleFileUploadSubmit(e) {
             var storage = firebase.storage();
-            var storageRef = storage.ref();
+            var storageRef = storage.ref().child("images/");
+
+            image_title = selectedFile.name;
 
             const uploadTask = storageRef.child(`${selectedFile.name}`).put(selectedFile);
 
@@ -217,14 +219,12 @@
             var titleField = document.getElementById("title");
             var descField = document.getElementById("title");
             var postable = {
-                "authorId":"9tLEc35JTxRoKhl79wK4JfiNHpE3",
+                "authorId":"Y13rmDJfUzQxHekdFBqeNCfsQJJ2",
                 "commentsCount":0,
                 "createdDate":(new Date).getTime(),
                 "createdDateText":(new Date).getTime(),
                 "description":descField.value,
-                "hasComplain":"true",
                 "likesCount":0,
-                "watchesCount":0,
                 "title":titleField.value,
                 "imagePath":image_path,
                 "imageTitle":image_title,
@@ -238,9 +238,7 @@
                 "createdDate":(new Date).getTime(),
                 "createdDateText":(new Date).getTime(),
                 "description":descField.value,
-                "hasComplain":"true",
                 "likesCount":0,
-                "watchersCount":0,
                 "title":titleField.value,
                 "imagePath":image_path,
                 "imageTitle":image_title,
