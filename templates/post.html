@@ -167,6 +167,8 @@
 
         var image_path;
         var image_title;
+        var fbRef = firebase.database().ref().child('posts').push();
+        var fbKey = fbRef.key;
 
         document.querySelector('.file-select').addEventListener('change', handleFileUploadChange.bind(this));
         document.querySelector('.file-submit').addEventListener('click', handleFileUploadSubmit.bind(this));
@@ -177,9 +179,14 @@
 
         function handleFileUploadSubmit(e) {
             var storage = firebase.storage();
-            var storageRef = storage.ref();
+            var storageRef = storage.ref().child("images/");
 
-            const uploadTask = storageRef.child(`${selectedFile.name}`).put(selectedFile);
+            fbRef = firebase.database().ref().child('posts').push();
+            fbKey = fbRef.key;
+
+            image_title = "post_"+fbKey;
+
+            const uploadTask = storageRef.child(`${image_title}`).put(selectedFile);
 
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
                 function(snapshot) {
@@ -216,31 +223,32 @@
             //image_path = "https://firebasestorage.googleapis.com/v0/b/fir-basic-9a5d7.appspot.com/o/images%2F16177689_1154837131301276_6330080972678035995_o_7257_1.jpg?alt=media&token=3863937a-09bc-494e-9258-bc03b5b0a902";//storageRef.getDownloadURL();
             var titleField = document.getElementById("title");
             var descField = document.getElementById("title");
+
+            var user = firebase.auth().currentUser;
+
+            var time = new Date().getTime();
+            var date = new Date(time);
+
             var postable = {
-                "authorId":"9tLEc35JTxRoKhl79wK4JfiNHpE3",
+                "authorId":user.uid,
                 "commentsCount":0,
-                "createdDate":(new Date).getTime(),
-                "createdDateText":(new Date).getTime(),
+                "createdDate":time,
+                "createdDateText":date.toString(),
                 "description":descField.value,
-                "hasComplain":"true",
                 "likesCount":0,
-                "watchesCount":0,
                 "title":titleField.value,
                 "imagePath":image_path,
                 "imageTitle":image_title,
             };
 
-            var fbRef = firebase.database().ref().child('posts').push();
-            var fbKey = fbRef.key;
+
             firebase.database().ref().child('posts').child(fbKey).set({
-                "authorId":"9tLEc35JTxRoKhl79wK4JfiNHpE3",
+                "authorId":user.uid,
                 "commentsCount":0,
-                "createdDate":(new Date).getTime(),
-                "createdDateText":(new Date).getTime(),
+                "createdDate":time,
+                "createdDateText":date.toString(),
                 "description":descField.value,
-                "hasComplain":"true",
                 "likesCount":0,
-                "watchersCount":0,
                 "title":titleField.value,
                 "imagePath":image_path,
                 "imageTitle":image_title,

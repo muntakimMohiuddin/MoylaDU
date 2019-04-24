@@ -3,9 +3,10 @@
 {% endblock head %}
 {%  extends 'index.html' %}
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
@@ -54,166 +55,160 @@
         margin-bottom: 5px;
     }
 
-    .mr {
-
-    }
+    .mr {}
 
     .equal {
         margin-top: 0px;
     }
 
-    .times {
+    .times {}
 
-    }
+    .sttimes {}
 
-    .sttimes {
-
-    }
-
-    .status {
-
-    }
+    .status {}
 </style>
+
 <body>
-<main role="main">
+    <main role="main">
 
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-7">
-            <a href="/post" class="float"><i class="fa fa-plus my-float"></i></a>
-            {% for post in posts %}
-            <div class="card mt-3 shadow">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-7">
+                <a href="/post" class="float"><i class="fa fa-plus my-float"></i></a>
+                {% for post in posts %}
+                <div class="card mt-3 shadow">
 
-                <div class="card-header" id="block">
-                    <p id="hh"><b> {{ post.title }} </b><sub><a href="/profile/{{ post.authorId }}"> {{ post.authorName
+                    <div class="card-header" id="block">
+                        <p id="hh"><b> {{ post.title }} </b><sub><a href="/profile/{{ post.authorId }}"> {{ post.authorName
                         }}</a>
-                        {{ post.createdDateText }}</sub>
+                                {{ post.createdDateText }}</sub>
 
-                    </p>
-                </div>
-                <div class="card-body">
-                    {%for description in post.description %}
-                    <p class="card-text">{{ description }}</p>
-                    {% endfor %}
-                    <div style="width:100%; text-align:center">
-                        <a href={{"#myModal"+loop.index|string}} data-toggle="modal"><img id="img" style="width: 90%"
-                                                                                          src="{{post.imagePath}}"
-                                                                                          align="center"></a>
-                        <div style="margin-left: 5%;text-align: center"
-                             id={{"myModal"+loop.index|string}} class="modal fade"
-                             role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <span class="close" data-dismiss="modal">&times;</span>
-                            <div>
-                                <img style="width: 80%; height: 95%;margin-top: 1%;float: left" src={{post.imagePath}}
-                                     class="modal-content" >
-                            </div>
-                            <div class="card mt-3 shadow">
-                                {% for comment in post.comments %}
-                                <div class="card-header" style="text-align: left">
-                                    <img src={{comment[1].profilePic}} name="aboutme" width="30"
-                                 height="30" border="0" class="img-circle">
-                                    <a href="/profile/{{ comment[1].authorId}}" style="color: #005cbf"><b>{{comment[1].authorName}}</b></b></a>
+                        </p>
+                    </div>
+                    <div class="card-body">
+
+                        <div style="width:100%; text-align:center">
+                            <a href={{"#myModal"+loop.index|string}} data-toggle="modal">
+                                <img id="img" style="width: 100%" src="{{post.imagePath}}" align="center">
+                            </a>
+                            <div style="margin-left: 5%;text-align: center" id={{"myModal"+loop.index|string}}
+                                class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <span class="close" data-dismiss="modal">&times;</span>
+                                <div>
+                                    <img style="width: 80%; height: 95%;margin-top: 1%;float: left"
+                                        src={{post.imagePath}} class="modal-content">
                                 </div>
-                                <div class="card-body" style="text-align: left">
-                                    {{comment[1].text}}
+                                <div class="card mt-3 shadow">
+                                    {% for comment in post.comments %}
+                                    <div class="card-header" style="text-align: left">
+                                        <img src={{comment[1].profilePic}} name="aboutme" width="30" height="30"
+                                            border="0" class="img-circle">
+                                        <a href="/profile/{{ comment[1].authorId}}"
+                                            style="color: #005cbf"><b>{{comment[1].authorName}}</b></b></a>
+                                    </div>
+                                    <div class="card-body" style="text-align: left">
+                                        {{comment[1].text}}
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
                             </div>
-                        </div>
-                        <p></p>
-                        <div class="form-group">
-                            <textarea hidden placeholder="Comment" class="form-control" rows="1"
-                                      id={{"comment"+loop.index|string}}></textarea>
-                            <button hidden class="btn-primary" id={{"comment_post"+loop.index|string}}
+                            <p></p>
+                            <div class="form-group">
+                                <textarea hidden placeholder="Comment" class="form-control" rows="1"
+                                    id={{"comment"+loop.index|string}}></textarea>
+                                <button hidden class="btn-primary" id={{"comment_post"+loop.index|string}}
                                     onclick="commentPost(this)">post
-                            </button>
+                                </button>
+                            </div>
                         </div>
+                        {%for description in post.description %}
+                        <p class="card-text">{{ description }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                        <a onclick="like(this)" name={{post.id}} id={{"like"+loop.index|string}}><i
+                                style="margin-left:30%" class="fas fa-thumbs-up">like</i>
+                        </a>
+                        <a onclick="comment(this)" name={{post.id}} id={{"comment_button"+loop.index|string}}><i
+                                style="margin-left: 20%" class="fas fa-comments">comment</i>
+
+                        </a>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a onclick="like(this)" name={{post.id}} id={{"like"+loop.index|string}}><i style="margin-left:30%"
-                                                                                                class="fas fa-thumbs-up">like</i>
-                    </a>
-                    <a onclick="comment(this)" name={{post.id}} id={{"comment_button"+loop.index|string}}><i
-                            style="margin-left: 20%" class="fas fa-comments">comment</i>
 
-                    </a>
-                </div>
+
+                {% endfor %}
             </div>
 
 
-            {% endfor %}
         </div>
 
+        <script type="text/javascript">
+            postId = 0;
+            authorId = 0;
+            function commentPost(element) {
+                var commentField = document.getElementById("comment" + element.id.substring(12));
+                var commentContent = commentField.value;
+                postId = document.getElementById("like" + element.id.substring(12)).name;
+                var url = "post-comments/" + postId;
+                var postable = {
+                    "authorId": "Y13rmDJfUzQxHekdFBqeNCfsQJJ2",
+                    "createdDate": (new Date).getTime(),
+                    "text": commentContent,
+                    "id": "dummy"
+                };
+                var firebase = new Firebase(commentUtil);
+                firebase.post(url, postable);
+                comment(document.getElementById("comment_button" + element.id.substring(12)))
+            }
 
-    </div>
+            function comment(element) {
 
-    <script type="text/javascript">
-        postId = 0;
-        authorId=0;
-        function commentPost(element) {
-            var commentField = document.getElementById("comment" + element.id.substring(12));
-            var commentContent = commentField.value;
-            postId = document.getElementById("like" + element.id.substring(12)).name;
-            var url = "post-comments/" + postId;
-            var postable = {
-                "authorId": "Y13rmDJfUzQxHekdFBqeNCfsQJJ2",
-                "createdDate": (new Date).getTime(),
-                "text": commentContent,
-                "id": "dummy"
-            };
-            var firebase = new Firebase(commentUtil);
-            firebase.post(url, postable);
-            comment(document.getElementById("comment_button" + element.id.substring(12)))
-        }
+                var commentBox = document.getElementById("comment" + element.id.substring(14));
+                var commentbtn = document.getElementById("comment_post" + element.id.substring(14));
+                commentBox.hidden = !commentBox.hidden;
+                commentbtn.hidden = commentBox.hidden;
 
-        function comment(element) {
+            }
 
-            var commentBox = document.getElementById("comment" + element.id.substring(14));
-            var commentbtn = document.getElementById("comment_post" + element.id.substring(14));
-            commentBox.hidden = !commentBox.hidden;
-            commentbtn.hidden = commentBox.hidden;
+            function like(element) {
+                var firebase = new Firebase(likeUtil1);
+                postId = element.name;
+                firebase.get("posts/" + postId + "/authorId");
 
-        }
+            }
+            function likeUtil1(data) {
+                authorId = data;
+                var url = "post-likes/" + postId + "/" + authorId;
+                var postable = {
+                    "createdDate": (new Date).getTime(),
+                    "id": "dummy"
+                };
+                var firebase = new Firebase(likeUtil2);
+                firebase.post(url, postable);
 
-        function like(element) {
-            var firebase = new Firebase(likeUtil1);
-            postId = element.name;
-            firebase.get("posts/"+postId+"/authorId");
+            }
+            function likeUtil2(data) {
+                var id = data.name;
+                var firebase = new Firebase(dummy);
+                url = "post-likes/" + postId + "/" + authorId + "/" + id + "/id";
+                firebase.put(url, id);
+            }
 
-        }
-    function likeUtil1(data) {
-            authorId=data;
-        var url = "post-likes/" + postId + "/"+ authorId;
-            var postable = {
-                "createdDate": (new Date).getTime(),
-                "id": "dummy"
-            };
-            var firebase = new Firebase(likeUtil2);
-            firebase.post(url, postable);
+            function commentUtil(data) {
+                // alert("Post with id: " + data.name);
+                var id = data.name;
+                var firebase = new Firebase(dummy);
+                url = "post-comments/" + postId + "/" + id + "/id";
+                firebase.put(url, id);
+            }
 
-    }
-        function likeUtil2(data) {
-            var id = data.name;
-            var firebase = new Firebase(dummy);
-            url = "post-likes/" +  postId + "/"+authorId + "/" + id + "/id";
-            firebase.put(url, id);
-        }
-
-        function commentUtil(data) {
-            // alert("Post with id: " + data.name);
-            var id = data.name;
-            var firebase = new Firebase(dummy);
-            url = "post-comments/" + postId + "/" + id + "/id";
-            firebase.put(url, id);
-        }
-
-        function dummy(param) {
-            var x = param;
-        }
+            function dummy(param) {
+                var x = param;
+            }
 
 
-    </script>
-</main>
+        </script>
+    </main>
 </body>
 {% endblock content %}

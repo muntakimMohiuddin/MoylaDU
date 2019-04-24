@@ -40,6 +40,11 @@ ckeditor = CKEditor(app)
 app.secret_key = "super secret key"
 sess = Session()
 
+
+class user_form(Form):
+    uid = StringField('username', [validators.DataRequired()])
+
+
 @app.route('/')
 def index():
     postlist = []
@@ -51,21 +56,32 @@ def index():
 
     error = 'You are not logged in'
     dumb = 'dumb'
-    if 'username' in session:
-        return redirect(url_for('login',methods=['GET', 'POST']))
+    '''if 'username' not in session:
+        return redirect(url_for('login',methods=['GET', 'POST']))'''
     return render_template('home.html', error=error, dumb=dumb, posts=postlist)
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register')#, methods=['GET', 'POST'])
 def register():
+    """
     pass
+    """
+    return render_template('register_user.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # googleAuth=firebaseAuth.auth()
-    if request.method=="POST":
-        print(request.data)
     return render_template('login.html')
+
+@app.route('/setUsername',methods=['GET', 'POST'])
+def set_username():
+    print("username set")
+    #form = user_form(request.form)
+    session['username'] = request.form['username']
+    print(session['username'])
+    response = {"data": "ok"}
+    return jsonify(response)
+
 
 @app.route('/logout')
 def logout():
@@ -73,9 +89,15 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
 @app.route('/profile/<id>',methods=['GET', 'POST'])
 def profile(id):
     if id=="myself":
+        if 'username' not in session:
+            print("aaaaaa")
+
+        print(session['username'])
+        user = User(firebase.get('/users/' + session['username'], None))
         user = User(firebase.get('/users/' + "Y13rmDJfUzQxHekdFBqeNCfsQJJ2", None))
         user.department=Utils.short([user.department])[0]
         return render_template('profile.html',user=user,edit=True)
@@ -105,10 +127,10 @@ def edit_profile():
         departments=departments[faculty]
         return jsonify(departments)
     return render_template('edit_profile.html',user=user,halls=halls,faculties=departments.keys(),departments=departments[userFaculty],userFaculty=userFaculty)
-userid="Y13rmDJfUzQxHekdFBqeNCfsQJJ2"
+
 @app.route('/submitProfile',methods=['GET', 'POST'])
 def submit_profile():
-    user = dict(firebase.get("/users/" + userid, None))
+    user = dict(firebase.get("/users/" + session['username'], None))
     for key,value in dict(request.form).items():
         if value is not None and len(value)>0:
             try:
@@ -117,7 +139,7 @@ def submit_profile():
                 user[key] = value
     print(dict(request.form))
     print(user)
-    firebase.put("/users/",userid,user)
+    firebase.put("/users/",session['username'],user)
     return jsonify("change","ok")
 
 

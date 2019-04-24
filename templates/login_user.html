@@ -1,0 +1,175 @@
+{% block head %}
+{% endblock head %}
+{% extends 'index.html' %}
+{% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/register.css" media="all">
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
+    <script>
+      var config = {
+        apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+        authDomain: "fir-basic-9a5d7.firebaseapp.com",
+        databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+        projectId: "fir-basic-9a5d7",
+        storageBucket: "fir-basic-9a5d7.appspot.com",
+        messagingSenderId: "463528068065"
+      };
+      firebase.initializeApp(config);
+    </script>
+</head>
+<body>
+<main role="main" class="container">
+        <div class="main-w3layouts wrapper">
+            <h1 align="center">Login</h1>
+            <div class="main-agileinfo">
+                <div class="agileits-top">
+
+                    <input class="text email" type="email" name="email" placeholder="Email" required="" id="email" onkeyup="check_mail(this.value);">
+                    <div class="wthree-text" id="mail_d" style="display: none;">
+                        <label class="anim">
+                            <span id="mail_v"></span>
+                        </label>
+                    </div>
+
+{#                    <input class="text" type="text" name="Username" placeholder="Name" required="">#}
+{#                    <input class="text" type="text" name="Username" placeholder="Name" required="">#}
+{#                    <input class="text" type="text" name="Username" placeholder="Name" required="">#}
+
+                    <input class="text" type="password" name="password" placeholder="Password" required="" id="pass" onkeyup="check(this.value);">
+                    <div class="wthree-text" id="pass_l_d" style="display: none;">
+                        <label class="anim">
+                            <span id="pass_len"></span>
+                        </label>
+                    </div>
+
+
+                    <input type="submit" value="LOGIN" onclick="log_me_in();">
+                </div>
+            </div>
+        </div>
+</main>
+<script>
+
+
+    function validateEmail(address){
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(address.match(mailformat)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function check_mail(val) {
+
+        var mailV = document.getElementById('mail_v');
+        if(validateEmail(val) == false){
+            document.getElementById('mail_d').style.display = 'block';
+            mailV.innerHTML = "Wrong email address";
+            console.log("RETURNED invalid email");
+            return;
+        }
+        else {
+            document.getElementById('mail_d').style.display = 'none';
+            return;
+        }
+    }
+
+    function check(pss) {
+        var passLen = document.getElementById('pass_len');
+        if(pss.length < 6){
+            document.getElementById('pass_l_d').style.display = 'block';
+            passLen.innerHTML = "Too short";
+            console.log("RETURNED invalid pass");
+            return;
+        }
+        else {
+            document.getElementById('pass_l_d').style.display = 'none';
+            return;
+        }
+    }
+
+
+    function log_me_in() {
+
+        var emailField = document.getElementById('email').value;
+        var passField = document.getElementById('pass').value;
+
+        var passLen = document.getElementById('pass_len');
+
+        {#if(nameField.length<1){#}
+        {#    //re enter data#}
+        {#    console.log("RETURNED invalid name");#}
+        {#    return;#}
+        {#if(validateEmail(emailField) == false){#}
+        {#    //#}
+        {#    console.log("RETURNED invalid email");#}
+        {#    return;#}
+        {#if(passField.length<6){#}
+        {#    //#}
+        {#    console.log("RETURNED invalid pass");#}
+        {#    return;#}
+        {#if(passField != rePassField){#}
+        {#    //#}
+        {#    console.log("RETURNED pass missmatch");#}
+        {#    return;#}
+
+        console.log(emailField+" : "+passField );
+
+        check_mail(emailField);
+        check(passField);
+
+        var checkEmail = false;
+        var originalPass = null;
+        var uid = null;
+
+        var database = firebase.database();
+        var dataRef = database.ref('user_credential');
+        dataRef.on('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                var childData = childSnapshot.val();
+                var email = childData.email;
+
+                if(email == emailField){
+                    checkEmail = true;
+                    originalPass = childData.pass;
+                    uid = childSnapshot.key;
+                }
+
+                console.log(email);
+            });
+
+            if(checkEmail == false){
+                //email does not exist
+                document.getElementById('mail_d').style.display = 'block';
+                document.getElementById('mail_v').innerHTML = "This email address does not exist!";
+                console.log("RETURNED invalid email");
+                return;
+            }
+            else {
+                //proceed to log in
+                if(passField != originalPass){
+                    document.getElementById('pass_l_d').style.display = 'block';
+                    passLen.innerHTML = "Too short";
+                    console.log("RETURNED invalid pass");
+                    return;
+                }
+                else {
+                    var c = "email="+emailField+"; uid="+uid;
+                    document.cookie = c;
+                    console.log("LOGGED IN");
+                    //goto home page
+                    window.location.replace("/");
+                }
+            }
+        });
+    }
+</script>
+</body>
+{% endblock content %}
