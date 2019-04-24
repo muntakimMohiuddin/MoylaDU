@@ -117,6 +117,7 @@ def edit_profile():
     user = User(firebase.get('/users/' +session['username'], None))
     halls = Utils.getHalls()
     departments=Utils.getFacultywiseDepartments()
+    faculties = departments.keys()
     print(departments)
     userFaculty=Utils.getFacultyFromDepartment(user.department)
     user.department=Utils.resolve(user.department)
@@ -127,22 +128,27 @@ def edit_profile():
         print(faculty)
         departments=departments[faculty]
         return jsonify(departments)
-    return render_template('edit_profile.html',user=user,halls=halls,faculties=departments.keys(),departments=departments[userFaculty],userFaculty=userFaculty)
+    try:
+        departments=departments[userFaculty]
+    except:
+        departments=[]
+    print(user.department)
+    return render_template('edit_profile.html',user=user,halls=halls,faculties=faculties,departments=departments,userFaculty=userFaculty)
 
 @app.route('/submitProfile',methods=['GET', 'POST'])
 def submit_profile():
+    print( session['username'],request.form)
     user = dict(firebase.get("/users/" + session['username'], None))
     for key,value in dict(request.form).items():
+        if type(value)==list:
+            print("list",value)
+            value=value[0]
         if value is not None and len(value)>0:
-            try:
-                user[key]=value[0]
-            except:
-                user[key] = value
-
+            user[key] = value
     print(dict(request.form))
-    print(user)
+    print("pushed",user)
     firebase.put("/users/",session['username'],user)
-    firebase.put("/users/",session['username'],Profile(user).__str__())
+    firebase.put("/profiles/",session['username'],Profile(user).__dict__)
     return jsonify("change","ok")
 
 

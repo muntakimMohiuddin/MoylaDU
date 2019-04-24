@@ -93,7 +93,7 @@
                 <h1>Edit Profile</h1></center>
             <div class="block">
                 <label>Name:</label>
-                <input id="name" style="text-align: center" type="search" value="{{user.username}}">
+                <input id="username" style="text-align: center" type="search" value="{{user.username}}">
             </div>
             <div class="block">
                 <label>Roll:</label>
@@ -281,7 +281,7 @@
             url: '/submitProfile',
             // contentType: 'application/json',
             data: {
-                "name": $(name).val(),
+                "username": $(username).val(),
                 "roll": $(roll).val(),
                 "dept": $(department).val(),
                 "session": $(session1).val() + "-" + $(session2).val(),

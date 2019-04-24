@@ -55,4 +55,5 @@ def resolve(department):
             for i  in range(len(short(departments))):
                 if department==short(departments)[i]:
                     return departments[i]
+    return department
 print(getFaculties())

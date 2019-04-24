@@ -27,6 +27,7 @@ class User:
 
 class Profile():
     def __init__(self, user_obj):
+        print("in profile",user_obj)
         try:
             self.id = user_obj['id']
         except KeyError:
@@ -44,7 +45,7 @@ class Profile():
         except KeyError:
             pass
         try:
-            self.likesCount = firebase.get("/profiles/"+self.id+"/likesCount")
+            self.likesCount = firebase.get("/profiles/"+self.id+"/likesCount",None)
         except KeyError:
             pass
 
