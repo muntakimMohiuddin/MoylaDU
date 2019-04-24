@@ -15,6 +15,7 @@ from wtforms import Form, IntegerField, StringField, PasswordField, validators
 from wtforms.fields import SubmitField, TextAreaField
 from wtforms.fields.html5 import EmailField
 from forms import IssueForm, CommentForm,UploadForm,graph_input,create_article_form,LoginForm,RegisterForm
+import munch
 app = Flask(__name__)
 UPLOAD_FOLDER = os.path.dirname(os.path.realpath(__file__)) + '/static/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf'}
@@ -76,16 +77,22 @@ def logout():
 def profile(id):
     if id=="myself":
         user = User(firebase.get('/users/' + "Y13rmDJfUzQxHekdFBqeNCfsQJJ2", None))
+        user.department=Utils.short([user.department])[0]
         return render_template('profile.html',user=user,edit=True)
     user=User(firebase.get('/users/'+id,None))
     print(user)
     return render_template('profile.html',user=user,edit=False)
 import Utils
+
+@app.route('/getUUID',methods=['GET'])
+def get_UUID():
+    return uuid.uuid4().__str__()
+
 @app.route('/editProfile',methods=['GET', 'POST'])
 def edit_profile():
     id="Y13rmDJfUzQxHekdFBqeNCfsQJJ2"
     user = User(firebase.get('/users/' +id, None))
-    halls = open("templates/includes/halls.txt").read().split("\n")
+    halls = Utils.getHalls()
     departments=Utils.getFacultywiseDepartments()
     print(departments)
     userFaculty=Utils.getFacultyFromDepartment(user.department)
@@ -93,39 +100,28 @@ def edit_profile():
     print(userFaculty)
     if "faculty" in request.form:
         faculty=request.form['faculty']
+        print(request.form)
         print(faculty)
         departments=departments[faculty]
         return jsonify(departments)
     return render_template('edit_profile.html',user=user,halls=halls,faculties=departments.keys(),departments=departments[userFaculty],userFaculty=userFaculty)
-
+userid="Y13rmDJfUzQxHekdFBqeNCfsQJJ2"
 @app.route('/submitProfile',methods=['GET', 'POST'])
 def submit_profile():
-    pass
-# @app.route('/posts/<id>')
-# def posts(id):
-#     if not ('username' in session):
-#         return redirect(url_for('login'))
-#
-#     from profile import profilePostCall
-#     post_array,user=profilePostCall(id)
-#     return render_template('user_post.html', post_array=post_array,user=user)
-#
-#
+    user = dict(firebase.get("/users/" + userid, None))
+    for key,value in dict(request.form).items():
+        if value is not None and len(value)>0:
+            try:
+                user[key]=value[0]
+            except:
+                user[key] = value
+    print(dict(request.form))
+    print(user)
+    firebase.put("/users/",userid,user)
+    return jsonify("change","ok")
 
 
 
-@app.route('/user/<userName>',methods=['GET', 'POST'])
-def userProfile(userName):
-    class User:
-        def __init__(self, name, username, mail):
-            self.name = name
-            self.username = username
-            self.mail = mail
-    users = ''
-    existing_user = users.find_one({'USERNAME': userName})
-    print("exist",existing_user,userName)
-    user = User(existing_user['NAMES'], existing_user['USERNAME'], existing_user['MAIL'])
-    return render_template('profile.html', user=user)
 
 class PasswordForm(Form):
     password = StringField('Password')
