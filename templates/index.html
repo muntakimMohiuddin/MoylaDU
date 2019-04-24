@@ -119,7 +119,7 @@
       <ul class="sidenav"  style="list-style-type:none">
          <li class="sidebar-brand">
             <a href="/">
-                     <b>Clean Du</b><i class="fas fa-broom"></i><span class="glyphicon glyphicon-trash"></span></a>
+                     <b>CleanDU</b><i class="fas fa-broom"></i><span class="glyphicon glyphicon-trash"></span></a>
          </li>
          <!--<li id="Problem Set">-->
             <!--<a href="/about"><i class="fa fa-book"></i>          Problem Set</a>-->
@@ -132,7 +132,7 @@
          <!--</li>-->
          <!--<li id="News">-->
              <!--<a href="/news"><i class="fa fa-newspaper-o"></i>            News</a>-->
-         <!--<li id="Issue">-->
+         <!--<li id="Issue">-->  
             <!--<a href="/issues"><i class="fa fa-times-rectangle-o"></i>            Issues</a>-->
          <!--</li>-->
          <!--<li id="subs">-->
@@ -147,25 +147,16 @@
 
       </ul>
       <ul class="sidebar-nav-bottom" style="list-style-type:none" >
-         {% if not session.logged_in %}
          <li  id="login">
             <a href="/login"><i class="fa fa-sign-in"></i>          Login</a>
+         </li> 
          </li>
-         <li id="register">
-            <a href="/register"><i class="fa fa-university"></i>           Sign Up</a>
-         </li>
-
-          <li id="user1">
-            <a href="/profile/myself"><i id="profile1" class="fa fa-user-circle-o"></i>         {{session['username']}} </a>
-         </li>
-         {% else %}
           <li id="user">
-            <a href="/profile/myself"><i id="profile" class="fa fa-user-circle-o"></i>         {{session['username']}} </a>
+            <a id="profile" href="/profile/myself"><i  class="fa fa-user-circle-o"></i></a>
          </li>
-         <li>
+         <li id = "logout">
              <a href="/logout"><i class="fa fa-sign-out"></i>         Sign Out</a>
          </li>
-         {% endif %}
       </ul>
       <div class="main">
          {% block content %}{% endblock %}
@@ -216,4 +207,45 @@
                </script>
             </div>
    </body>
+
+
+   <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+   <script>
+      // Initialize Firebase
+      var config = {
+         apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+         authDomain: "fir-basic-9a5d7.firebaseapp.com",
+         databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+         projectId: "fir-basic-9a5d7",
+         storageBucket: "fir-basic-9a5d7.appspot.com",
+         messagingSenderId: "463528068065"
+      };
+      firebase.initializeApp(config);
+
+      function login() {
+
+         function newLoginHappened(user) {
+            if (user) {
+               app(user);
+            } else{
+               document.getElementById("user").style.display = "none";
+               document.getElementById("logout").style.display = "none";
+            }
+
+         }
+         firebase.auth().onAuthStateChanged(newLoginHappened);
+      }
+
+      function app(user) {
+         var displayName = user.displayName;
+         var email = user.email;
+         var photoURL = user.photoURL;
+         var uid = user.uid;
+         document.getElementById("login").style.display = "none";
+         document.getElementById("profile").innerHTML = " <i  class='fa fa-user-circle-o'>"+"</i>          "+user.displayName;
+      }
+
+      window.onload = login;
+   </script>
+
 </html>

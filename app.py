@@ -55,8 +55,8 @@ def index():
 
     error = 'You are not logged in'
     dumb = 'dumb'
-    if 'username' not in session:
-        return redirect(url_for('login',methods=['GET', 'POST']))
+    '''if 'username' not in session:
+        return redirect(url_for('login',methods=['GET', 'POST']))'''
     return render_template('home.html', error=error, dumb=dumb, posts=postlist)
 
 
