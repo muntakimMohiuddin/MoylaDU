@@ -85,11 +85,11 @@
 
                         </p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="padding:0%">
 
                         <div style="width:100%; text-align:center">
                             <a href={{"#myModal"+loop.index|string}} data-toggle="modal">
-                                <img id="img" style="width: 100%" src="{{post.imagePath}}" align="center">
+                                <img id="img" style="width: 100%;padding :0%;" src="{{post.imagePath}}" align="center">
                             </a>
                             <div style="margin-left: 5%;text-align: center" id={{"myModal"+loop.index|string}}
                                 class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                         {%for description in post.description %}
-                        <p class="card-text">{{ description }}</p>
+                        <p style="padding:3%" class="card-text">{{ description }}</p>
                         {% endfor %}
                     </div>
                     <div class="card-footer">
