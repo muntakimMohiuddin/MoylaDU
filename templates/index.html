@@ -155,7 +155,7 @@
             <a id="profile" href="/profile/myself"><i  class="fa fa-user-circle-o"></i></a>
          </li>
          <li id = "logout">
-             <a href="/logout"><i class="fa fa-sign-out"></i>         Sign Out</a>
+             <a href="/logout" onclick="log_me_out();"><i class="fa fa-sign-out"></i>         Sign Out</a>
          </li>
       </ul>
       <div class="main">
@@ -247,5 +247,11 @@
 
       window.onload = login;
    </script>
+
+<script>
+    function log_me_out() {
+        firebase.auth().signOut();
+    }
+</script>
 
 </html>
