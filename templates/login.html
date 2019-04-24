@@ -4,9 +4,11 @@
 </head>
 
 <body>
-  <h1>hello <span id="name"></span></h1>
+  <h1>... connecting <span id="name"></span></h1>
 </body>
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
 <script>
   // Initialize Firebase
@@ -35,11 +37,52 @@
   }
 
   function app(user) {
-    //user.displayeName
-    //user.email
-    //user.photoURL
-    //user.uid
-    document.getElementById("name").innerHTML = user.displayName;
+      var displayName = user.displayName;
+      var email = user.email;
+      var photoURL = user.photoURL;
+      var uid = user.uid;
+
+      var oldUser = false;
+      var query = firebase.database().ref("users").orderByKey();
+      query.once("value").then(function (snapshot) {
+          snapshot.forEach(function (childSnapshot) {
+              var key = childSnapshot.key;
+              console.log(childSnapshot.key);
+              if(key==uid){
+                  oldUser = true;
+                  console.log("Old user");
+              }
+          });
+
+          var fbRef = firebase.database().ref().child('users');
+          if(oldUser==false){
+              fbRef.child(uid).set({
+                  "dept": "",
+                  "email":email,
+                  "hall":"",
+                  "id":uid,
+                  "likesCount":0,
+                  "photoUrl":photoURL,
+                  "roll":"",
+                  "session":"",
+                  "username":displayName
+              });
+          }
+          $.ajax({
+          type: 'POST',
+          url: '/setUsername',
+          data: {"username": user.uid},
+          success: function (data) {
+              console.log(data);
+              window.location.replace("/profile/myself");
+          }
+      });
+      var txt = " " + user.displayName;
+      document.getElementById("name").innerText = txt;
+      });
+
+
+
   }
 
   window.onload = login;
