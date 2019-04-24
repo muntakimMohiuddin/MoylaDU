@@ -4,7 +4,7 @@ import time
 from firebase import firebase
 from posts import Posts
 from flask import Flask, render_template, request, jsonify
-from user import User
+from user import User,Profile
 # import flask_oauth
 from flask import flash
 from flask import redirect, url_for, session, Session
@@ -56,8 +56,8 @@ def index():
 
     error = 'You are not logged in'
     dumb = 'dumb'
-    '''if 'username' not in session:
-        return redirect(url_for('login',methods=['GET', 'POST']))'''
+    if 'username' not in session:
+        return redirect(url_for('login',methods=['GET', 'POST']))
     return render_template('home.html', error=error, dumb=dumb, posts=postlist)
 
 
@@ -95,15 +95,17 @@ def profile(id):
     if id=="myself":
         if 'username' not in session:
             print("aaaaaa")
-
         print(session['username'])
         user = User(firebase.get('/users/' + session['username'], None))
-        user = User(firebase.get('/users/' + "Y13rmDJfUzQxHekdFBqeNCfsQJJ2", None))
         user.department=Utils.short([user.department])[0]
         return render_template('profile.html',user=user,edit=True)
     user=User(firebase.get('/users/'+id,None))
-    print(user)
-    return render_template('profile.html',user=user,edit=False)
+    postlist = []
+    result = firebase.get('/posts', None)
+    for key, value in result.items():
+        postlist.append(Posts(key, value).getShowable())
+    postlist=[post for post in postlist if post.authorId==id]
+    return render_template('profile.html',user=user,edit=False,posts=postlist)
 import Utils
 
 @app.route('/getUUID',methods=['GET'])
@@ -112,8 +114,7 @@ def get_UUID():
 
 @app.route('/editProfile',methods=['GET', 'POST'])
 def edit_profile():
-    id="Y13rmDJfUzQxHekdFBqeNCfsQJJ2"
-    user = User(firebase.get('/users/' +id, None))
+    user = User(firebase.get('/users/' +session['username'], None))
     halls = Utils.getHalls()
     departments=Utils.getFacultywiseDepartments()
     print(departments)
@@ -137,9 +138,11 @@ def submit_profile():
                 user[key]=value[0]
             except:
                 user[key] = value
+
     print(dict(request.form))
     print(user)
     firebase.put("/users/",session['username'],user)
+    firebase.put("/users/",session['username'],Profile(user).__str__())
     return jsonify("change","ok")
 
 
