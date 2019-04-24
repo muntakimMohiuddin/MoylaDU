@@ -104,7 +104,7 @@ def profile(id):
 import Utils
 @app.route('/editProfile',methods=['GET', 'POST'])
 def edit_profile():
-    id="Y13rmDJfUzQxHekdFBqeNCfsQJJ2"
+    id=session['username']
     user = User(firebase.get('/users/' +id, None))
     halls = open("templates/includes/halls.txt").read().split("\n")
     departments=Utils.getFacultywiseDepartments()

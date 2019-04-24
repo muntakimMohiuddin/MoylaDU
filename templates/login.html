@@ -67,6 +67,14 @@
                   "session":"",
                   "username":displayName
               });
+
+              firebase.database().ref().child('profiles').child(uid).set({
+                  "email":email,
+                  "id":uid,
+                  "likesCount":0,
+                  "photoUrl":photoURL,
+                  "username":displayName
+              });
           }
           $.ajax({
           type: 'POST',
@@ -74,7 +82,13 @@
           data: {"username": user.uid},
           success: function (data) {
               console.log(data);
-              window.location.replace("/profile/myself");
+              if(oldUser){
+                  window.location.replace("/");
+              }
+              else {
+                  window.location.replace("/editProfile");
+              }
+
           }
       });
       var txt = " " + user.displayName;
