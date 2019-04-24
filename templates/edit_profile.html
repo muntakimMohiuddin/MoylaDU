@@ -93,11 +93,11 @@
                 <h1>Edit Profile</h1></center>
             <div class="block">
                 <label>Name:</label>
-                <input style="text-align: center" type="search" value="{{user.username}}">
+                <input id="name" style="text-align: center" type="search" value="{{user.username}}">
             </div>
             <div class="block">
                 <label>Roll:</label>
-                <input style="text-align: center" type="number" value="{{user.roll|int}}">
+                <input id="roll" style="text-align: center" type="number" value="{{user.roll|int}}">
             </div>
             <div class="block">
                 <label>Faculty:</label>
@@ -151,21 +151,36 @@
                 </div>
                 <div class="block">
                     <label>Email:</label>
-                    <input style="text-align: center" type="email" value="{{user.email}}">
+                    <input id="email" style="text-align: center" type="email" value="{{user.email}}">
                 </div>
                 <div class="block">
                     <label>Session:</label>
-                    <input style="text-align: center" type="number" value="{{user.session.split('-')[0]}}">
-                    <input style="text-align: center" type="number" value="{{user.session.split('-')[1]}}">
+                    <input id="session1" style="text-align: center" type="number"
+                           value="{{user.session.split('-')[0]}}">
+                    <input id="session2" style="text-align: center" type="number"
+                           value="{{user.session.split('-')[1]}}">
                 </div>
                 <div style="padding-top: 7px" class="block">
                     <label>Photo:</label>
-                    <img  width="300" src="{{user.photoUrl}}">
-                    <button class="btn-primary">change</button>
+                    <img width="300" src="{{user.photoUrl}}">
+                    <button class="btn-primary" onclick="function f() {
+                      document.getElementById('photo_file').hidden =false;
+                    }">change
+                    </button>
+                    <div class="form-row">
+                        <div class="name"></div>
+                        <div class="value">
+                            <div class="input-group js-input-file">
+                                <input class="file-select" type="file" name="file_photo" id="photo_file"
+                                       accept="image/*" style="margin-left: 20px">
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="block">
                     <label></label>
-                    <button style="margin-top: 15px "  class="btn-primary">Sumbit</button>
+                    <button style="margin-top: 15px " id="submit" class="btn-primary">Sumbit</button>
                 </div>
             </div>
 
@@ -174,7 +189,72 @@
 
 </main>
 </body>
+<script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
 <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyD3yfe-3IxCi06W72sUf5XhylXv420gWF8",
+        authDomain: "fir-basic-9a5d7.firebaseapp.com",
+        databaseURL: "https://fir-basic-9a5d7.firebaseio.com",
+        projectId: "fir-basic-9a5d7",
+        storageBucket: "fir-basic-9a5d7.appspot.com",
+        messagingSenderId: "463528068065"
+    };
+    firebase.initializeApp(config);
+
+</script>
+
+<script>
+
+    document.querySelector('.file-select').addEventListener('change', handleFileUploadChange.bind(this));
+    let selectedFile;
+    let image_path='';
+
+    function handleFileUploadChange(e) {
+        selectedFile = e.target.files[0];
+        handleFileUploadSubmit(e)
+    }
+
+    function handleFileUploadSubmit(e) {
+        var storage = firebase.storage();
+        var storageRef = storage.ref().child("images/");
+        var uploadTask;
+        $.ajax({
+            type: 'GET',
+            url: '/getUUID',
+            success: function (data) {
+                uploadTask = storageRef.child(data).put(selectedFile);
+                uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                    function (snapshot) {
+                        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        switch (snapshot.state) {
+                            case firebase.storage.TaskState.PAUSED:
+                                console.log('Upload is paused');
+                                break;
+                            case firebase.storage.TaskState.RUNNING: // or 'running'
+                                console.log('Upload is running');
+                                break;
+                        }
+                    }, function (error) {
+                        switch (error.code) {
+                            case 'storage/unauthorized':
+                                break;
+                            case 'storage/canceled':
+                                break;
+                            case 'storage/unknown':
+                                break;
+                        }
+                    }, function () {
+                        uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                            image_path = downloadURL;
+                        });
+                    });
+            }
+        });
+
+    };
+
     $(faculty).on('change', function () {
         var id = $(this).val();
         $.ajax({
@@ -193,7 +273,27 @@
 
             }
         });
+    });
+    $(submit).on('click', function () {
 
-    })
+        $.ajax({
+            type: 'POST',
+            url: '/submitProfile',
+            // contentType: 'application/json',
+            data: {
+                "name": $(name).val(),
+                "roll": $(roll).val(),
+                "dept": $(department).val(),
+                "session": $(session1).val() + "-" + $(session2).val(),
+                "email": $(email).val(),
+                "photoUrl":image_path
+            },
+            success: function (data) {
+                location.reload(true)
+            }
+        });
+
+    });
+
 </script>
 {% endblock content %}
